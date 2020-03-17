@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+create_entry() {
+  touch "${1}"
+}
+
+get_filename() {
+  todays_date=$(date +%Y%m%d)
+  echo "${todays_date}.md"
+}
+
+if ! test -f "$(get_filename)"
+then
+  create_entry "$(get_filename)"
+else
+  >&2 echo "ERROR: File already exists: $(get_filename)"
+  exit 1
+fi
