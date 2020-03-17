@@ -13,6 +13,18 @@ get_filename() {
 
 stream_small_amount_of_data_into_todays_entry() {
   >&2 echo "INFO: Waiting at most one second for input."
+  case "$(uname -s)" in
+    Darwin)
+      /usr/local/opt/coreutils/libexec/gnubin/timeout 1 cat /dev/stdin >> "$(get_filename)"
+      ;;
+    Linux)
+      timeout 1 cat /dev/stdin >> "$(get_filename)"
+      ;;
+    *)
+      >&2 echo "Failed to find timeout."
+      exit 1
+      ;;
+  esac
   timeout 1 cat /dev/stdin >> "$(get_filename)"
   if [ $? -eq 124 ]
   then
