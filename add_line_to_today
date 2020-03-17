@@ -1,0 +1,42 @@
+#!/usr/bin/env sh
+set -x
+export TZ=UTC
+create_entry() {
+  touch "${1}"
+}
+
+get_filename() {
+  todays_date=$(date +%Y%m%d)
+  echo "${todays_date}.md"
+}
+
+stream_small_amount_of_data_into_todays_entry() {
+  timeout 1 cat /dev/stdin >> "$(get_filename)"
+  if [ $? -eq 124 ]
+  then
+    if ! test -s $(get_filename)
+    then
+      >&2 echo "ERROR: Please provide a journal entry."
+      exit 1
+    else
+      >&2 echo "WARNING: A journal entry was added, but this script timed out
+before adding all of it. Open this file in vi and add your entry directly."
+      exit 2
+    fi
+  fi
+}
+
+redirect_data_into_todays_entry() {
+  echo "- $*" >> "$(get_filename)"
+}
+
+if ! test -f "$(get_filename)"
+then
+  create_entry "$(get_filename)"
+fi
+if [ $# -gt 0 ]
+then
+  redirect_data_into_todays_entry $*
+else
+  stream_small_amount_of_data_into_todays_entry
+fi
