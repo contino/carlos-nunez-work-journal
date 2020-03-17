@@ -12,6 +12,7 @@ get_filename() {
 }
 
 stream_small_amount_of_data_into_todays_entry() {
+  >&2 echo "INFO: Waiting at most one second for input."
   timeout 1 cat /dev/stdin >> "$(get_filename)"
   if [ $? -eq 124 ]
   then
@@ -41,3 +42,5 @@ then
 else
   stream_small_amount_of_data_into_todays_entry
 fi
+echo "$(get_filename)"
+exit 0
