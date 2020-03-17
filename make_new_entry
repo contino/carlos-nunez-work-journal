@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+export TZ=UTC
 create_entry() {
   touch "${1}"
 }
