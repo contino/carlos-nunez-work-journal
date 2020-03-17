@@ -7,7 +7,8 @@ create_entry() {
 
 get_filename() {
   todays_date=$(date +%Y%m%d)
-  echo "${todays_date}.md"
+  journal_dir=$(dirname $0)
+  echo "${journal_dir}/${todays_date}.md"
 }
 
 stream_small_amount_of_data_into_todays_entry() {
